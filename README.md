@@ -1,4 +1,6 @@
-# g2k.js - Gamepad-to-keyboard handler for HTML 5 games
+# g2k.js
+
+A gamepad-to-keyboard handler for HTML 5 games.
 
 Lots of HTML 5 games already have built-in gamepad support using browser's [Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API). Older games often don't. This is a small script for simulating keyboard events from gamepad input in HTML5 games. It currently supports one gamepad. `g2k.js` is loosely based on apps like [JoyToKey](https://joytokey.net/en/) and [antimicro](https://github.com/AntiMicro/antimicro).
 
