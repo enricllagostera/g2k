@@ -19,84 +19,101 @@ If the button with a given index is pressed, it will fire a keydown event with t
 
 */
 
-// const g2k = (function () {
-const mapping = {
-  axes: [
-    { idx: 1, threshold: -0.8, keyCode: 38 },
-    { idx: 1, threshold: 0.8, keyCode: 40 },
-    { idx: 0, threshold: 0.8, keyCode: 39 },
-    { idx: 0, threshold: -0.8, keyCode: 37 },
-  ],
-  buttons: [
-    { idx: 0, keyCode: 13 }, // Enter
-    { idx: 15, keyCode: 39 }, // Right
-    { idx: 14, keyCode: 37 }, // Left
-    { idx: 12, keyCode: 38 }, // Up
-    { idx: 13, keyCode: 40 }, // Down
-  ],
-};
-const refreshRate = 20; // In milliseconds. Bitsy games work better with a larger number (e.g. 60).
-const targetElement = document; // This depends on how the game you are running handles keyboard input. Useful values: window (Clickteam games), document (older Bitsy games).
+const g2k = (function () {
+  const mapping = {
+    axes: [
+      { idx: 1, threshold: -0.8, keyCode: 38 },
+      { idx: 1, threshold: 0.8, keyCode: 40 },
+      { idx: 0, threshold: 0.8, keyCode: 39 },
+      { idx: 0, threshold: -0.8, keyCode: 37 },
+    ],
+    buttons: [
+      { idx: 0, keyCode: 13 }, // Enter
+      { idx: 99, keyCode: 13 }, // Invalid value
+      { idx: -1, keyCode: 13 }, // Invalid value
+    ],
+  };
+  const refreshRate = 20; // In milliseconds. Bitsy games work better with a larger number (e.g. 60).
+  const targetElement = document; // This depends on how the game you are running handles keyboard input. Useful values: window (Clickteam games), document (older Bitsy games).
 
-var gamepad = false;
+  var gamepad = false;
 
-window.addEventListener("gamepadconnected", function (e) {
-  gamepad = navigator.getGamepads()[e.gamepad.index];
-});
+  window.addEventListener("gamepadconnected", function (e) {
+    gamepad = navigator.getGamepads()[e.gamepad.index];
+  });
 
-window.addEventListener("gamepaddisconnected", function (e) {
-  gamepad = false;
-});
+  window.addEventListener("gamepaddisconnected", function (e) {
+    gamepad = false;
+  });
 
-function handleGamepad(elapsed) {
-  if (gamepad == false) {
-    return;
-  }
-
-  var ua = navigator.userAgent;
-  if (ua.toLowerCase().indexOf("chrome") != -1) {
-    console.log("IS CHROME");
-    gamepad = navigator.getGamepads()[0];
-  }
-
-  var eventsToFire = [];
-
-  for (let i = 0; i < mapping.buttons.length; i++) {
-    const currentButton = mapping.buttons[i];
-    if (gamepad.buttons[currentButton.idx].pressed) {
-      eventsToFire.push(
-        new KeyboardEvent("keydown", { keyCode: currentButton.keyCode })
-      );
-    } else {
-      eventsToFire.push(
-        new KeyboardEvent("keyup", { keyCode: currentButton.keyCode })
-      );
+  function handleGamepad(elapsed) {
+    if (gamepad == false) {
+      return;
     }
-  }
 
-  for (let i = 0; i < mapping.axes.length; i++) {
-    const currentAxis = mapping.axes[i];
-    if (currentAxis.threshold > 0.0) {
-      // checks for higher values
-      if (gamepad.axes[currentAxis.idx] > currentAxis.threshold) {
-        eventsToFire.push(
-          new KeyboardEvent("keydown", { keyCode: currentAxis.keyCode })
-        );
+    var ua = navigator.userAgent;
+    if (ua.toLowerCase().indexOf("chrome") != -1) {
+      // console.log("IS CHROME");
+      gamepad = navigator.getGamepads()[0];
+    }
+
+    var eventsToFire = [];
+
+    for (let i = 0; i < mapping.buttons.length; i++) {
+      const currentButton = mapping.buttons[i];
+      if (
+        gamepad.buttons.length <= currentButton.idx ||
+        currentButton.idx < 0
+      ) {
+        // console.warn("No button " + currentButton.idx + " on gamepad.");
+        continue;
       }
-    } else if (currentAxis.threshold < 0.0) {
-      // checks for lower values
-      if (gamepad.axes[currentAxis.idx] < currentAxis.threshold) {
+      if (gamepad.buttons[currentButton.idx].pressed) {
         eventsToFire.push(
-          new KeyboardEvent("keydown", { keyCode: currentAxis.keyCode })
+          new KeyboardEvent("keydown", { keyCode: currentButton.keyCode })
+        );
+      } else {
+        eventsToFire.push(
+          new KeyboardEvent("keyup", { keyCode: currentButton.keyCode })
         );
       }
     }
+
+    for (let i = 0; i < mapping.axes.length; i++) {
+      const currentAxis = mapping.axes[i];
+      if (gamepad.axes.length <= currentAxis.idx || currentAxis.idx < 0) {
+        // console.warn("No axes " + currentAxis.idx + " on gamepad.");
+        continue;
+      }
+      if (currentAxis.threshold > 0.0) {
+        // checks for higher values
+        if (gamepad.axes[currentAxis.idx] > currentAxis.threshold) {
+          eventsToFire.push(
+            new KeyboardEvent("keydown", { keyCode: currentAxis.keyCode })
+          );
+        } else {
+          eventsToFire.push(
+            new KeyboardEvent("keyup", { keyCode: currentAxis.keyCode })
+          );
+        }
+      } else if (currentAxis.threshold < 0.0) {
+        // checks for lower values
+        if (gamepad.axes[currentAxis.idx] < currentAxis.threshold) {
+          eventsToFire.push(
+            new KeyboardEvent("keydown", { keyCode: currentAxis.keyCode })
+          );
+        } else {
+          eventsToFire.push(
+            new KeyboardEvent("keyup", { keyCode: currentAxis.keyCode })
+          );
+        }
+      }
+    }
+
+    eventsToFire
+      .sort((a, b) => a.keyCode > b.keyCode)
+      .map((item) => targetElement.dispatchEvent(item));
   }
 
-  eventsToFire
-    .sort((a, b) => a.keyCode > b.keyCode)
-    .map((item) => targetElement.dispatchEvent(item));
-}
-
-setInterval(handleGamepad, refreshRate);
-// })();
+  setInterval(handleGamepad, refreshRate);
+})();
