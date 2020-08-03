@@ -2,7 +2,7 @@
 
 A gamepad-to-keyboard handler for HTML 5 games.
 
-Lots of HTML 5 games already have built-in gamepad support using browser's [Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API). Older games often don't. This is a small script for simulating keyboard events from gamepad input in HTML5 games. It supports multiple gamepads. `g2k.js` is loosely based on apps like [JoyToKey](https://joytokey.net/en/) and [antimicro](https://github.com/AntiMicro/antimicro).
+Lots of HTML 5 games already have built-in gamepad support using browser's [Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API). Older games often don't. This is a small script for simulating keyboard events from gamepad input in HTML5 games. It now supports multiple gamepads. `g2k.js` is loosely based on apps like [JoyToKey](https://joytokey.net/en/) and [antimicro](https://github.com/AntiMicro/antimicro).
 
 ## Usage
 
@@ -13,6 +13,7 @@ Lots of HTML 5 games already have built-in gamepad support using browser's [Game
     ```html
     <script src="g2k.js"></script>
     ```
+
 4. (Optional) If you want to add a click or touch-to-fullscreen functionality, you can go to the HTML tag of your game (maybe `canvas` or even `body`) and add the `onclick="g2k.doFullscreen()"` attribute:
 
     ```html
