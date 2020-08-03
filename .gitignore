@@ -1,4 +1,5 @@
 .vscode/
+.vscode/*
 *.html
 *.zip
 teste/
