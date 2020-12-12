@@ -6,9 +6,9 @@ Lots of HTML 5 games already have built-in gamepad support using browser's [Game
 
 ## Usage
 
-1. Copy the `g2k.js` file to yout HTML5 game folder.
-2. Configure the `mapping` (more details below), `refreshRate` and `targetElement` in the g2k.js file.
-3. On your main HTML file, link the g2k.js script, by adding a `<script>` tag like the one below, right before closing the `<body>` tag:
+1. Copy the `g2k.js` file to your HTML5 game folder.
+2. Configure the `mapping` (more details below), `refreshRate` and `targetElement` values in the `g2k.js` file.
+3. On your main HTML file, link the `g2k.js` script, by adding a `<script>` tag like the one below, right before closing the `<body>` tag:
 
     ```html
     <script src="g2k.js"></script>
