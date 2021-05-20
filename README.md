@@ -48,7 +48,7 @@ const mappings = {
 };
 ```
 
-To figure out the adequate axes or button indexes and threshold values for your specific gamepad device, check https://gamepad-tester.com/. To get `keyCode` values for the keys you are interested in, check the http://keycode.info/ website. These are the keys that will be simulated by `g2k.j`.
+To figure out the adequate axes or button indexes and threshold values for your specific gamepad device, check https://greggman.github.io/html5-gamepad-test/. To get `keyCode` values for the keys you are interested in, check the http://keycode.info/ website. These are the keys that will be simulated by `g2k.j`.
 
 If you want multiple controllers, you can add more add more mappings to the `devices` array above. Check the example below:
 
